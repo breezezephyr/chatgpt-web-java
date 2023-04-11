@@ -16,10 +16,12 @@ import com.hncboy.chatgpt.front.api.storage.AccessTokenDatabaseDataStorage;
 import com.hncboy.chatgpt.front.domain.request.ChatProcessRequest;
 import com.hncboy.chatgpt.front.service.ChatMessageService;
 import com.unfbx.chatgpt.entity.chat.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import jakarta.annotation.Resource;
+
 import java.util.Collections;
 import java.util.UUID;
 
@@ -28,6 +30,7 @@ import java.util.UUID;
  * @date 2023/3/24 13:12
  * AccessToken 响应处理
  */
+@Slf4j
 @Component
 public class AccessTokenResponseEmitter implements ResponseEmitter {
 
@@ -57,10 +60,10 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
 
         // 构建 ConversationRequest
         ConversationRequest conversationRequest = buildConversationRequest(chatMessageDO);
-
+        log.info("ConversationRequest: {}", ObjectMapperUtil.toJson(conversationRequest));
         // 构建事件监听器
         ParsedEventSourceListener parsedEventSourceListener = new ParsedEventSourceListener.Builder()
-//                .addListener(new ConsoleStreamListener())
+                //                .addListener(new ConsoleStreamListener())
                 .addListener(new ResponseBodyEmitterStreamListener(emitter))
                 .setParser(parser)
                 .setDataStorage(dataStorage)
@@ -100,7 +103,8 @@ public class AccessTokenResponseEmitter implements ResponseEmitter {
                 .action(ConversationRequest.MessageActionTypeEnum.NEXT)
                 .model(ConversationModelEnum.NAME_MAP.get(model))
                 // 父级消息 id 不能为空，不然会报错，因此第一条消息也需要随机生成一个
-                .parentMessageId(StrUtil.isBlank(chatMessageDO.getParentMessageId()) ? UUID.randomUUID().toString() : chatMessageDO.getParentMessageId())
+                .parentMessageId(
+                        StrUtil.isBlank(chatMessageDO.getParentMessageId()) ? UUID.randomUUID().toString() : chatMessageDO.getParentMessageId())
                 .conversationId(chatMessageDO.getConversationId())
                 .build();
     }

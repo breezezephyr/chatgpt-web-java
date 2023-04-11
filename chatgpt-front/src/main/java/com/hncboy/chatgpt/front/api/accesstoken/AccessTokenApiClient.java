@@ -4,6 +4,7 @@ import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import com.hncboy.chatgpt.base.util.ObjectMapperUtil;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/3/25 00:32
  * AccessTokenApiClient
  */
+@Slf4j
 @Builder
 public class AccessTokenApiClient {
 
@@ -66,6 +68,8 @@ public class AccessTokenApiClient {
                 .post(RequestBody.create(ObjectMapperUtil.toJson(conversationRequest), MediaType.parse(ContentType.JSON.getValue())))
                 .headers(headers)
                 .build();
+        log.info("streamChatCompletions request: {}", ObjectMapperUtil.toJson(request));
+
         // 创建事件
         EventSources.createFactory(okHttpClient).newEventSource(request, eventSourceListener);
     }

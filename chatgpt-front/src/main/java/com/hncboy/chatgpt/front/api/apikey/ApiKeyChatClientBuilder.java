@@ -1,6 +1,7 @@
 package com.hncboy.chatgpt.front.api.apikey;
 
 import cn.hutool.extra.spring.SpringUtil;
+import com.google.common.collect.Lists;
 import com.hncboy.chatgpt.base.config.ChatConfig;
 import com.unfbx.chatgpt.OpenAiClient;
 import com.unfbx.chatgpt.OpenAiStreamClient;
@@ -25,11 +26,7 @@ public class ApiKeyChatClientBuilder {
     public OpenAiStreamClient buildOpenAiStreamClient() {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
         return OpenAiStreamClient.builder()
-                .connectTimeout(chatConfig.getTimeoutMs())
-                .readTimeout(chatConfig.getTimeoutMs())
-                .writeTimeout(chatConfig.getTimeoutMs())
-                .apiKey(chatConfig.getOpenaiApiKey())
-                .proxy(getProxy())
+                .apiKey(Lists.newArrayList(chatConfig.getOpenaiApiKey()))
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }
@@ -42,11 +39,7 @@ public class ApiKeyChatClientBuilder {
     public OpenAiClient buildOpenAiClient() {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
         return OpenAiClient.builder()
-                .connectTimeout(chatConfig.getTimeoutMs())
-                .readTimeout(chatConfig.getTimeoutMs())
-                .writeTimeout(chatConfig.getTimeoutMs())
-                .apiKey(chatConfig.getOpenaiApiKey())
-                .proxy(getProxy())
+                .apiKey(Lists.newArrayList(chatConfig.getOpenaiApiKey()))
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }

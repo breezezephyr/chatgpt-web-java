@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS chat_room (
     conversation_id VARCHAR(64) UNIQUE NULL COMMENT '对话 id，唯一',
     first_chat_message_id BIGINT UNIQUE NOT NULL  COMMENT '第一条消息主键',
     first_message_id VARCHAR(64) UNIQUE NOT NULL COMMENT '第一条消息',
-    title VARCHAR(255) NOT NULL COMMENT '对话标题，从第一条消息截取',
+    title VARCHAR(5000) NOT NULL COMMENT '对话标题，第一条消息',
     api_type VARCHAR(20) NOT NULL COMMENT 'API 类型',
     create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT  '更新时间'

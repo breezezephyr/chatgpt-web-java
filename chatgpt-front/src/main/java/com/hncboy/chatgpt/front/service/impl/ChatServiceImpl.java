@@ -55,15 +55,16 @@ public class ChatServiceImpl implements ChatService {
     public ResponseBodyEmitter chatProcess(ChatProcessRequest chatProcessRequest) {
         // 超时时间设置 3 分钟
         ResponseBodyEmitter emitter = new ResponseBodyEmitter(3 * 60 * 1000L);
-        emitter.onCompletion(() -> log.debug("请求参数：{}，Front-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
+        emitter.onCompletion(() -> log.info("请求参数：{}，Front-end closed the emitter connection. response:{}", ObjectMapperUtil.toJson(chatProcessRequest),emitter.toString()));
         emitter.onTimeout(() -> log.error("请求参数：{}，Back-end closed the emitter connection.", ObjectMapperUtil.toJson(chatProcessRequest)));
 
         // 构建 emitter 处理链路
-        ResponseEmitterChain ipRateLimiterEmitterChain = new IpRateLimiterEmitterChain();
-        ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
-        sensitiveWordEmitterChain.setNext(new ChatMessageEmitterChain());
-        ipRateLimiterEmitterChain.setNext(sensitiveWordEmitterChain);
-        ipRateLimiterEmitterChain.doChain(chatProcessRequest, emitter);
+//        ResponseEmitterChain ipRateLimiterEmitterChain = new IpRateLimiterEmitterChain();
+//        ResponseEmitterChain sensitiveWordEmitterChain = new SensitiveWordEmitterChain();
+//        sensitiveWordEmitterChain.setNext(new ChatMessageEmitterChain());
+        ChatMessageEmitterChain chatMessageEmitterChain = new ChatMessageEmitterChain();
+//        ipRateLimiterEmitterChain.setNext(sensitiveWordEmitterChain);
+        chatMessageEmitterChain.doChain(chatProcessRequest, emitter);
         return emitter;
     }
 }
