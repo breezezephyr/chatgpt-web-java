@@ -10,6 +10,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,6 +33,8 @@ public class ChatConfig implements InitializingBean {
      * OpenAI API Key - https://beta.openai.com/docs/api-reference/authentication
      */
     private String openaiApiKey;
+
+    private List<String> openApiKeyList;
 
     /**
      * OpenAI Access Token - https://beta.openai.com/docs/api-reference/authentication
@@ -202,6 +206,10 @@ public class ChatConfig implements InitializingBean {
     public void afterPropertiesSet() {
         if (StrUtil.isBlank(openaiApiKey) && StrUtil.isBlank(openaiAccessToken)) {
             throw new RuntimeException("apiKey 或 accessToken 必须有值");
+        }
+
+        if (StrUtil.isNotBlank(openaiApiKey)) {
+            openApiKeyList = Arrays.asList(openaiApiKey.split(","));
         }
 
         // ApiKey

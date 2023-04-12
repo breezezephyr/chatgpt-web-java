@@ -53,7 +53,7 @@ chat:
   # ip 最大请求时间间隔（秒）
   ipMaxRequestSecond: ${CHAT_IP_MAX_REQUEST_SECOND:3600}
   # 限制上下文对话的数量
-  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:30}
+  limitQuestionContextCount: ${CHAT_LIMIT_QUESTION_CONTEXT_COUNT:100}
   # 是否展示余额，默认不展示
   isShowBalance: ${CHAT_IS_SHOW_BALANCE:true}
   # 是否展示管理端隐藏的消息，默认不展示

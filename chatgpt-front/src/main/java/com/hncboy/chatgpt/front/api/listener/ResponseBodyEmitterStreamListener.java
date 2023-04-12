@@ -30,7 +30,6 @@ public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
 
         try {
             emitter.send((messageCount != 1 ? "\n" : "") + ObjectMapperUtil.toJson(chatReplyMessageVO));
-            log.info("第{}条消息，消息内容：{}", messageCount, receivedMessage);
         } catch (Exception e) {
             log.warn("消息发送异常，第{}条消息，消息内容：{}", messageCount, receivedMessage, e);
             throw new ServiceException("消息发送异常");
@@ -39,6 +38,7 @@ public class ResponseBodyEmitterStreamListener extends AbstractStreamListener {
 
     @Override
     public void onComplete(String receivedMessage) {
+        log.info("收到 gpt 返回的消息：{}", receivedMessage);
         emitter.complete();
     }
 

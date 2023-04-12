@@ -3,6 +3,7 @@ package com.hncboy.chatgpt.front.api.storage;
 import com.hncboy.chatgpt.base.domain.entity.ChatMessageDO;
 import com.unfbx.chatgpt.entity.chat.ChatCompletionResponse;
 import com.unfbx.chatgpt.entity.common.Usage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -13,6 +14,7 @@ import java.util.UUID;
  * @date 2023/3/25 22:52
  * ApiKey 数据库数据存储
  */
+@Slf4j
 @Component
 public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
 
@@ -40,8 +42,15 @@ public class ApiKeyDatabaseDataStorage extends AbstractDatabaseDataStorage {
      * @param chatMessageStorage 聊天消息数据存储
      */
     private void populateMessageUsageToken(ChatMessageStorage chatMessageStorage) {
-        ChatCompletionResponse chatCompletionResponse = (ChatCompletionResponse) chatMessageStorage.getParser()
-                .parseSuccess(chatMessageStorage.getOriginalResponseData());
+
+        ChatCompletionResponse chatCompletionResponse = null;
+        try {
+            chatCompletionResponse = (ChatCompletionResponse) chatMessageStorage.getParser()
+                    .parseSuccess(chatMessageStorage.getOriginalResponseData());
+        } catch (Exception e) {
+            log.error("解析 ChatCompletionResponse 失败", e);
+            throw new RuntimeException("OpenAI Server error");
+        }
         Usage usage = chatCompletionResponse.getUsage();
         if (Objects.nonNull(usage)) {
             // FIXME 没有 usage

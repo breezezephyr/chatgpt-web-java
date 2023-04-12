@@ -26,7 +26,7 @@ public class ApiKeyChatClientBuilder {
     public OpenAiStreamClient buildOpenAiStreamClient() {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
         return OpenAiStreamClient.builder()
-                .apiKey(Lists.newArrayList(chatConfig.getOpenaiApiKey()))
+                .apiKey(chatConfig.getOpenApiKeyList())
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }
@@ -39,7 +39,7 @@ public class ApiKeyChatClientBuilder {
     public OpenAiClient buildOpenAiClient() {
         ChatConfig chatConfig = SpringUtil.getBean(ChatConfig.class);
         return OpenAiClient.builder()
-                .apiKey(Lists.newArrayList(chatConfig.getOpenaiApiKey()))
+                .apiKey(chatConfig.getOpenApiKeyList())
                 .apiHost(chatConfig.getOpenaiApiBaseUrl())
                 .build();
     }

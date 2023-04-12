@@ -29,7 +29,7 @@ public class ChatRoomServiceImpl extends ServiceImpl<ChatRoomMapper, ChatRoomDO>
         chatRoom.setFirstChatMessageId(chatMessageDO.getId());
         chatRoom.setFirstMessageId(chatMessageDO.getMessageId());
         // 取一部分内容当标题
-        chatRoom.setTitle(StrUtil.sub(chatMessageDO.getContent(), 0, 50));
+        chatRoom.setTitle(chatMessageDO.getContent());
         chatRoom.setCreateTime(new Date());
         chatRoom.setUpdateTime(new Date());
         save(chatRoom);
